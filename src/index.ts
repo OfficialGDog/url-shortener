@@ -1,15 +1,15 @@
 import express from "express";
-import type { Request, Response } from "express";
+import router from "./routes/urlRoutes.js";
+import dotenv from "dotenv";
+dotenv.config({quiet: true});
 
 const app = express();
-const PORT = 3004;
+const {BASE_URL, PORT} = process.env;
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-res.send('Hello, TypeScript with Express!');
-});
+app.use("/api", router); // prefixed endpoints with /api to clearly separate API endpoints from frontend routes.
 
 app.listen(PORT, () => {
-console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on ${BASE_URL}:${PORT}`);
 });
