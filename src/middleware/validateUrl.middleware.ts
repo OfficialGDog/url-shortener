@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { isValidHttpUrl } from "../utils/url.js";
+import { isValidHttpUrl } from "../utils/validateUrl.js"
 
 /* validateUrl middleware: only allows URLs starting with http:// or https://
 next() is called only if the URL is valid. */

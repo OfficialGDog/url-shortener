@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { shortenUrl, redirectUrl } from "../controllers/urlController.js"
-import { validateUrl } from "../middleware/validateUrl.js";
+import { shortenUrl, redirectUrl } from "../controllers/url.controller.js"
+import { validateUrl } from "../middleware/validateUrl.middleware.js";
 
 const router = Router();
 

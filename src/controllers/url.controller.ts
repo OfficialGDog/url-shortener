@@ -15,7 +15,7 @@ export function shortenUrl(req: Request, res: Response) {
 
  urlDatabase[code] = url;
 
- res.status(201).json({ sUrl: `${process.env.BASE_URL}:${process.env.PORT}/api/${code}` });
+ res.status(201).json({ shortUrl: `${process.env.BASE_URL}:${process.env.PORT}/api/${code}` });
 }
 
 export function redirectUrl(req: Request<RedirectParams>, res: Response) {
