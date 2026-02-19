@@ -2,7 +2,7 @@ import mongoose, {Document, Schema} from "mongoose";
 
 export interface IShortURL extends Document {
   originalUrl: string;
-  id: string;
+  code: string;
   clicks: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -15,7 +15,7 @@ const urlSchema = new Schema<IShortURL>(
       required: true,
       trim: true,
     },
-    id: {
+    code: {
       type: String,
       required: true,
       unique: true,

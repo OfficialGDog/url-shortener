@@ -40,5 +40,7 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  }, 
+  "include": ["src/**/*", "src/tests/setupDB.ts", "src/tests/url.test.ts"],
+  "exclude": ["src/tests/**/*", "**/*.test.ts"]
 }
