@@ -13,6 +13,52 @@ afterAll(async () => {
 });
 
 describe("URL Shortener API", () => {
+  describe("GET /api/urls", () => {
+    it("should return all shortened URLs", async () => {
+      await urlModel.create({
+        originalUrl: "https://stackoverflow.com/",
+        code: "code1",
+        clicks: 3,
+      });
+
+      const res = await request(app).get("/api/urls");
+
+      expect(res.status).toBe(200);
+
+      expect(Array.isArray(res.body)).toBe(true);
+
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: "code1",
+            originalUrl: "https://stackoverflow.com/",
+            clicks: 3,
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe("GET /:code", () => {
+    it("should redirect when code exists", async () => {
+      const doc = await urlModel.create({
+        originalUrl: "https://www.youtube.com",
+        code: "abc123",
+      });
+
+      const res = await request(app).get(`/${doc.code}`);
+
+      expect(res.status).toBe(302);
+      expect(res.headers.location).toBe("https://www.youtube.com");
+    });
+
+    it("should return 404 when code does not exist", async () => {
+      const res = await request(app).get(`/gdog`);
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe("URL not found");
+    });
+  });
+
   describe("POST /api/shorten", () => {
     it("should create a short URL", async () => {
       const res = await request(app)
@@ -20,9 +66,7 @@ describe("URL Shortener API", () => {
         .send({ url: "https://www.google.com" });
 
       expect(res.status).toBe(201);
-      expect(res.body).toMatchObject({
-        shortUrl: expect.stringContaining("/api/"),
-      });
+      expect(res.body.shortUrl).toBeDefined();
     });
 
     it("should reject invalid URL", async () => {
@@ -43,26 +87,6 @@ describe("URL Shortener API", () => {
       });
 
       expect(foundDocument).not.toBeNull();
-    });
-  });
-
-  describe("GET /api/:code", () => {
-    it("should redirect when code exists", async () => {
-      const doc = await urlModel.create({
-        originalUrl: "https://www.youtube.com",
-        code: "abc123",
-      });
-
-      const res = await request(app).get(`/api/${doc.code}`);
-
-      expect(res.status).toBe(302);
-      expect(res.headers.location).toBe("https://www.youtube.com");
-    });
-
-    it("should return 404 when code does not exist", async () => {
-      const res = await request(app).get(`/api/gdog`);
-      expect(res.status).toBe(404);
-      expect(res.body.error).toBe("URL not found");
     });
   });
 });

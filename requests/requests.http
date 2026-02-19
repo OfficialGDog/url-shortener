@@ -1,10 +1,16 @@
+@baseUrl = http://localhost:3004
+@contentType = application/json
+
+### Get all URLs
+GET {{baseUrl}}/api/urls
+
 ### Shorten a URL
-POST http://localhost:3004/api/shorten
+POST {{baseUrl}}/api/shorten
 Content-Type: application/json
 
 {
   "url": "https://stackoverflow.com/"
 }
 
-### Redirect to Original URL
-GET http://localhost:3004/api/test
+### Redirect to Original URL (if found)
+GET {{baseUrl}}/test

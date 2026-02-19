@@ -1,14 +1,22 @@
 import express from "express";
-import router from "./routes/url.routes.js";
+import apiRoutes from "./routes/api.routes.js";
+import redirectRoutes from "./routes/redirect.routes.js"
 import { connectToDatabase } from "./db.js";
+import errorHandler from "./middleware/errorHandler.middleware.js";
 
 const app = express();
 
-const { PORT } = process.env;
+const { NODE_ENV, PORT } = process.env;
 
 app.use(express.json());
 
-app.use("/api", router); // prefixed endpoints with /api to clearly separate API endpoints from frontend routes.
+/*  Optional: rate limiting middleware to prevent abuse under high traffic
+ for example: using express-rate-limit
+ app.use(rateLimiter); */
+
+app.use("/api", apiRoutes); // prefix endpoints with /api to clearly separate API endpoints from frontend routes.
+app.use("/", redirectRoutes); // redirect requests so /:code works without /api prefix
+app.use(errorHandler);
 
 async function startServer() {
   try {
@@ -22,6 +30,6 @@ async function startServer() {
   }
 }
 
-if (process.env.NODE_ENV !== "test") startServer();
+if (NODE_ENV !== "test") startServer();
 
 export default app;

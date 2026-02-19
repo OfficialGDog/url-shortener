@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { shortenUrl, redirectUrl } from "../controllers/url.controller.js"
+import { getAllUrls, shortenUrl } from "../controllers/url.controller.js"
 import { validateUrl } from "../middleware/validateUrl.middleware.js";
 
 const router = Router();
 
 router.post("/shorten", validateUrl, shortenUrl);
-router.get("/:code", redirectUrl);
+router.get("/urls", getAllUrls);
 
 export default router;
