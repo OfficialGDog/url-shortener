@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import urlModel from "../models/url.model.js";
-import { generateShortCode } from "../utils/generateCode.js";
+import { createShortUrl } from "../services/url.service.js";
 
 interface RedirectParams {
   code: string;
@@ -8,10 +8,7 @@ interface RedirectParams {
 
 export async function shortenUrl(req: Request, res: Response) {
  const { url } = req.body;
- const code = generateShortCode();
- const urlDoc = new urlModel({originalUrl: url, code})
-
- await urlDoc.save();
+ const { code } = await createShortUrl(url);
 
  res.status(201).json({ shortUrl: `${process.env.API_BASE_URL}:${process.env.PORT}/${code}` });
 }
