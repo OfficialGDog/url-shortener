@@ -13,8 +13,7 @@ export async function connectTestDatabase() {
 }
 
 export async function closeTestDatabase() {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
+  await mongoose.disconnect();
 
   if (db) {
     await db.stop();
